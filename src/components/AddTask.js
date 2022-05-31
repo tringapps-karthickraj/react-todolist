@@ -1,18 +1,40 @@
-import React,{useState,useEffect}  from 'react';
-import {TextField, Grid,Button} from '@mui/material';
+import React,{useState}  from 'react';
+import {TextField,Button,Box} from '@mui/material';
+import { useDispatch } from 'react-redux';
+import { insertList } from '../store/reducer';
 
 export default function AddTask() {
     const[task,setTask]=useState('');
+    const dispatch = useDispatch();
+    function onSubmit(event){
+      event.preventDefault();
+        dispatch(insertList(task))
+        setTask('');
+        
+      
+     }
   return (
-    <div>
-        <Grid container spacing={3}>
-  <Grid item xs={8}>
-  <TextField id="standard-basic" value={task} onChange={(event)=>setTask(event.target.value)}  multiline label="Standard" variant="standard" />
-  </Grid>
-  <Grid item xs={4}>
-    
-  </Grid>
-</Grid>
+    <div style={{display: "inline-block"}}>
+       <form onSubmit={onSubmit}>
+        <Box
+      sx={{
+        width: 500,
+        maxWidth: '100%',
+      }}
+    >
+      <TextField required fullWidth label="Task" id="fullWidth" value={task} onChange={(event)=>setTask(event.target.value)} />
+      <div>
+      <Button type="submit" variant="contained">Add Task</Button>
+
+      </div>
+
+    </Box>
+ <div>
+ 
+ </div>
+ 
+ 
+ </form>
          
     </div>
   )

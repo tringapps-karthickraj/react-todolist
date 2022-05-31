@@ -1,10 +1,10 @@
 import { createSlice } from '@reduxjs/toolkit'
 
-export const profiles = createSlice({
+export const todolist = createSlice({
   
   name: 'todolist',
   initialState: {
-   profiles: localStorage['toDoList'] ?  JSON.parse(localStorage['toDoList']).toDoListArr : [],
+   list: localStorage['toDoList'] ?  JSON.parse(localStorage['toDoList']).toDoListArr : [],
    editProfileData:{
      profile:{},
      index:-1
@@ -13,66 +13,64 @@ export const profiles = createSlice({
   reducers: {
     insertList: (state,action) => {
       let json={
-        profilesArr:[]
+        toDoListArr:[]
       };
-      if(localStorage['profiles'] === undefined){
-        localStorage['profiles'] = JSON.stringify(json);
-        console.log(localStorage['profiles']);
+      if(localStorage['toDoList'] === undefined){
+        localStorage['toDoList'] = JSON.stringify(json);
+        console.log(localStorage['toDoList']);
       }
-    
-      json.profilesArr = JSON.parse(localStorage['profiles']).profilesArr
-       json.profilesArr.push(action.payload)
-       localStorage['profiles'] = JSON.stringify(json);
+      let payloadobj={
+        task:action.payload,
+        completed:false,
+        isEdit:false
+      }
+      json.toDoListArr = JSON.parse(localStorage['toDoList']).toDoListArr
+       json.toDoListArr.push(payloadobj)
+       localStorage['toDoList'] = JSON.stringify(json);
         return {
           ...state,
-          profiles: [...state.profiles,action.payload] 
+          list: [...state.list,payloadobj] 
          
         }
      },
-    //  updateProfile: (state,action)=>{
-    //     const idx = state.editProfileData.index;
-    //     const copyArr = [...state.profiles];
-    //     console.log(copyArr)
-    //     const payload = action.payload
-    //     copyArr[idx] = payload;
-    //     const remainsState={
-    //       index:-1,
-    //       profile:{}
-    //     }
-    //     let json={
-    //       profilesArr:[]
-    //     };
-    //     json.profilesArr = JSON.parse(localStorage['profiles']).profilesArr
-    //     json.profilesArr[idx] = action.payload;
-    //     localStorage['profiles'] = JSON.stringify(json);
-    //    return{
-    //      ...state, 
-    //     profiles: copyArr,
-    //     editProfileData:remainsState
-    //   }
+     updateList: (state,action)=>{
+        const idx = action.payload.index;
+        const copyArr = [...state.list];
+        const payload = action.payload.list
+        copyArr[idx] = payload;
+        let json={
+          toDoListArr:[]
+        };
+        json.toDoListArr = JSON.parse(localStorage['toDoList']).toDoListArr
+        json.toDoListArr[idx] = action.payload.list;
+        localStorage['toDoList'] = JSON.stringify(json);
+       return{
+         ...state, 
+        list: copyArr
+      }
         
-    //  },
-    //  deleteProfile:(state,action)=>{
-    //    let localStr = JSON.parse(localStorage['profiles']).profilesArr;
-    //    localStr.splice(action.payload,1);
-    //    let json={
-    //     profilesArr:localStr
-    //    }
-    //    console.log(json);
-    //    localStorage['profiles'] = JSON.stringify(json);
+      },
+     deleteList:(state,action)=>{
+       let localStr = JSON.parse(localStorage['toDoList']).toDoListArr;
+       localStr.splice(action.payload,1);
+       let json={
+        toDoListArr:localStr
+       }
+       console.log(json);
+       localStorage['toDoList'] = JSON.stringify(json);
 
-    //   return {
-    //     ...state,
-    //     profiles: [...state.profiles.slice(0, action.payload),
-    //       ...state.profiles.slice(action.payload + 1)] 
+      return {
+        ...state,
+        list: [...state.list.slice(0, action.payload),
+          ...state.list.slice(action.payload + 1)] 
        
-    //   }
-    //  },
+      }
+     },
     //  editProfile:(state,action)=>{
     //     state.editProfileData = action.payload;
     //  }
   },
 })
 
-export const { insertProfile} = profiles.actions
-export default profiles.reducer
+export const { insertList,deleteList,updateList} = todolist.actions
+export default todolist.reducer

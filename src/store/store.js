@@ -1,8 +1,8 @@
 import { configureStore } from '@reduxjs/toolkit';
-import profiles from './reducer';
+import list from './reducer';
 
 export default configureStore({
   reducer: {
-    web: profiles,
+    web: list,
   },
 })
