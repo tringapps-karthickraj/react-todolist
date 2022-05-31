@@ -18,7 +18,7 @@ export default function DisplayTask() {
     let sendList  = JSON.parse(JSON.stringify(list));
     if(type ==='isComplete'){
       sendList.completed=!sendList.completed;
-    }else if(type ==='isEdit'){
+    }else if(type ==='isEdit' && (!listArr.find(ele=>ele.isEdit)||sendList.isEdit===true)){
       sendList.isEdit=!sendList.isEdit;
       if(sendList.isEdit){
         setTask(sendList.task);
@@ -43,7 +43,7 @@ export default function DisplayTask() {
               <h2>No data found</h2>
         }
         {listArr?.length > 0 && listArr.map((list,index)=>{
-        return <Grid container spacing={1}>
+        return <Grid key={index} container spacing={1}>
           <Grid item xs={1}>
          { !list.isEdit &&  <Checkbox  checked={list.completed} onChange={()=>changeStatus(list,index,'isComplete')}  color="success" />}
           </Grid>
